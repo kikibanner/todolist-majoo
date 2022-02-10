@@ -1,23 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import NewTodoCard from "./components/NewTodoCard";
+import ListCard from "./components/ListCard";
 
 function App() {
+  const [newTitle, setNewTitle] = useState('')
+  const [newDescription, setNewDescription] = useState('')
+  const [localTodos, setLocalTodos] = useState([])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div class="container">
+        <NewTodoCard localTodos={localTodos} setLocalTodos={setLocalTodos} newDescription={newDescription} setNewDescription={setNewDescription} newTitle={newTitle} setNewTitle={setNewTitle}/>        
+        <ListCard localTodos={localTodos} setLocalTodos={setLocalTodos} newDescription={newDescription} setNewDescription={setNewDescription} newTitle={newTitle} setNewTitle={setNewTitle}/>        
     </div>
   );
 }
