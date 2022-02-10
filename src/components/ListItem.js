@@ -12,7 +12,17 @@ const ListItem = ({setSelectedPage, todo, modal, setModal, setSelectedList, setE
         const withoutEdited = initialTodos.filter(i => i.id !== todo.id)
         localStorage.setItem("todos", JSON.stringify(withoutEdited.concat(todoObject)))
         setLocalTodos(JSON.parse(localStorage.getItem("todos")))
-        setSelectedPage(0)
+    }
+
+    const deleteList = (event) => {
+        event.preventDefault()
+        const todoObject = {
+            id: todo.id,
+        }
+        const initialTodos = JSON.parse(localStorage.getItem("todos"))
+        const withoutDeleted = initialTodos.filter(i => i.id !== todo.id)
+        localStorage.setItem("todos", JSON.stringify(withoutDeleted))
+        setLocalTodos(JSON.parse(localStorage.getItem("todos")))
     }
     
     return (
@@ -31,7 +41,7 @@ const ListItem = ({setSelectedPage, todo, modal, setModal, setSelectedList, setE
                 setEditedDescription(todo.description)
                 setEditedStatus(todo.status)
             }}> <small>edit</small> </button>
-            <button class="delete" hidden={todo.status == 1 ? true : false}>X</button>
+            <button onClick={(event)=> deleteList(event)} class="delete" hidden={todo.status == 1 ? true : false}>X</button>
         </div>
     )
 }

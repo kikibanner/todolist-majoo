@@ -85,6 +85,7 @@ const ListCard = ({ localTodos, setLocalTodos }) => {
 
 
     return (
+            <Router>
             <div id="list" class="card">
 
                 <DetailModal modal={modal} setModal={setModal} selectedList={selectedList} setLocalTodos={setLocalTodos} 
@@ -97,40 +98,65 @@ const ListCard = ({ localTodos, setLocalTodos }) => {
                     {/* Nanti dibikin switch */}
                     <ul class="nav-list">
                         <li>
-
+                            <Link to="/">
                                 <button class={selectedPage === 0 ? 'clicked' : ''} onClick={() => setSelectedPage(0)}>
                                     On Progress
                                 </button>
+                            </Link>
                         </li>
                         <li>
+                            <Link  to="/done">
                                 <button class={selectedPage === 1 ? 'clicked' : ''} onClick={() => setSelectedPage(1)} >
                                 Done
                                 </button>
+                            </Link>
                         </li>
                     </ul>
                 </nav>
 
                 {/* Nanti dibikin component sendiri */}
-                <div class="search">
+                {/* <div class="search">
                     <input type="text" class="input search" name="" id="" placeholder="Search..."/>
-                </div>
+                </div> */}
 
-                <div class="list">
-                    {
-                        localTodos.filter(l=> l.status === 0 ).map(todo => (
-                            <ListItem todo={todo} modal={modal} setModal={setModal} selectedList={selectedList} setSelectedList={setSelectedList} 
-                                editedTitle={editedTitle} setEditedTitle={setEditedTitle}
-                                editedDescription={editedDescription} setEditedDescription={setEditedDescription}
-                                editedStatus={editedStatus} setEditedStatus={setEditedStatus}
-                                selectedList={selectedList} setLocalTodos={setLocalTodos}
-                                setSelectedPage={setSelectedPage}
-                            />
-                        ))
-                    }
+                
+                <Switch>
+                    <Route exact path="/">
+                        <div class="list">
+                            {
+                                localTodos.filter(l=> l.status === 0 ).map(todo => (
+                                    <ListItem todo={todo} modal={modal} setModal={setModal} selectedList={selectedList} setSelectedList={setSelectedList} 
+                                        editedTitle={editedTitle} setEditedTitle={setEditedTitle}
+                                        editedDescription={editedDescription} setEditedDescription={setEditedDescription}
+                                        editedStatus={editedStatus} setEditedStatus={setEditedStatus}
+                                        selectedList={selectedList} setLocalTodos={setLocalTodos}
+                                        setSelectedPage={setSelectedPage}
+                                    />
+                                ))
+                            }
 
-                </div>
+                        </div>
+                    </Route>
+                    <Route exact path="/done">
+                        <div class="list">
+                            {
+                                localTodos.filter(l=> l.status === 1 ).map(todo => (
+                                    <ListItem todo={todo} modal={modal} setModal={setModal} selectedList={selectedList} setSelectedList={setSelectedList} 
+                                        editedTitle={editedTitle} setEditedTitle={setEditedTitle}
+                                        editedDescription={editedDescription} setEditedDescription={setEditedDescription}
+                                        editedStatus={editedStatus} setEditedStatus={setEditedStatus}
+                                        selectedList={selectedList} setLocalTodos={setLocalTodos}
+                                        setSelectedPage={setSelectedPage}
+                                    />
+                                ))
+                            }
+
+                        </div>
+                    </Route>
+                </Switch>
 
             </div>
+            </Router>
     )
 }
 
