@@ -27,6 +27,7 @@ const DetailModal = ({ modal, setModal, selectedList, setEditedTitle, editedTitl
         const status = event.target.status.value
         const id = event.target.id.value
         dispatch(updateSelectedToDo(id, title, description, status))
+        setModal(false)
     }
 
     const deleteTodo = (id) => {
@@ -49,7 +50,7 @@ const DetailModal = ({ modal, setModal, selectedList, setEditedTitle, editedTitl
                             <option value={selectedList.status === 1 ? 1: 0}>{selectedList.status === 1 ? 1: 0}</option>
                             <option value={selectedList.status === 0 ? 1: 0}>{selectedList.status === 0 ? 1: 0}</option>
                         </select>
-                        <button type="submit" class="submitbutton" onClick={() => setModal(false)}>Save</button>
+                        <button type="submit" class="submitbutton">Save</button>
                         <button class="deletebutton" onClick={() => {deleteTodo(selectedList.id); setModal(false)}} hidden={selectedList.status == 0 ? '' : true}>Delete</button>
                     </div>
                 </form>
