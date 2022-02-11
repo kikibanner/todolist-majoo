@@ -1,27 +1,16 @@
-const NewTodoCard = ({ localTodos, setLocalTodos,newDescription, setNewDescription, newTitle, setNewTitle }) => {
+import { useSelector, useDispatch } from 'react-redux'
+import { createToDo} from '../reducers/toDoListReducer'
 
-    const handleTitleChange = (event) => {
-        setNewTitle(event.target.value)
-        console.log(event.target.value)
-    }
-    
-      const handleDescriptionChange = (event) => {
-        setNewDescription(event.target.value)
-        console.log(event.target.value)
-    }
+const NewTodoCard = () => {
+    const dispatch = useDispatch()
 
     const addTodo = (event) => {
         event.preventDefault()
-        const todoObject = {
-          id: localTodos.length + 1,
-          title: newTitle,
-          description: newDescription,
-          status: 0,
-          createdAt: new Date().toISOString(),
-        }
-        const initialTodos = JSON.parse(localStorage.getItem("todos"))
-        localStorage.setItem("todos", JSON.stringify(initialTodos.concat(todoObject)))
-        setLocalTodos(JSON.parse(localStorage.getItem("todos")))
+        const title = event.target.title.value
+        const description = event.target.description.value
+        event.target.title.value = ''
+        event.target.description.value = ''
+        dispatch(createToDo(title, description))
     }
 
     return (
@@ -29,8 +18,8 @@ const NewTodoCard = ({ localTodos, setLocalTodos,newDescription, setNewDescripti
             <h3>New To-Do</h3><br/>
             <form onSubmit={addTodo}>
                 <div id="new" class="card"> 
-                    <input type="text" class="inputform title" onChange={handleTitleChange} placeholder="Title..."/>
-                    <textarea type="text" class="inputform desc" placeholder="Description..." width="100" height="100" onChange={handleDescriptionChange}></textarea>
+                    <input type="text" class="inputform title" name="title" placeholder="Title..."/>
+                    <textarea type="text" class="inputform desc" placeholder="Description..." width="100" height="100" name="description" ></textarea>
                     <button type="submit" class="submitbutton">Save</button>
                 </div>
             </form>

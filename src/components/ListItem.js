@@ -26,22 +26,18 @@ const ListItem = ({setSelectedPage, todo, modal, setModal, setSelectedList, setE
     }
     
     return (
-        <div class="list-item" key={todo.id}>
-            <button onClick={(event)=> checkList(event)} type="submit" class="delete" hidden={todo.status == 1 ? true : false} class="check">V</button>
-            <br />
-            <div class="text">
-                <b>{todo.title}</b>
-                <p>{todo.createdAt}</p>
-            </div>
-            <button className="view"
-            onClick={() => {
+        <div class="list-item" key={todo.id} onClick={() => {
                 setModal(true)
                 setSelectedList(todo)
                 setEditedTitle(todo.title)
                 setEditedDescription(todo.description)
                 setEditedStatus(todo.status)
-            }}> <small>edit</small> </button>
-            <button onClick={(event)=> deleteList(event)} class="delete" hidden={todo.status == 1 ? true : false}>X</button>
+            }}>
+            <br />
+            <div class="text">
+                <b>{todo.title}</b>
+                <p>{todo.createdAt}</p>
+            </div>
         </div>
     )
 }

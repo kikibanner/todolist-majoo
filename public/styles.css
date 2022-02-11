@@ -69,6 +69,22 @@ body {
     background-color: #09660c;
 }
 
+.deletebutton {
+    text-align: center;
+    color: white;
+    background-color: #9c0808;
+    border: none;
+    width: 100%;
+    padding: 15px 20px;
+    text-align: center;
+    margin: 0;
+    border-radius: 36px;
+}
+
+.deletebutton:hover {
+    background-color: #eb1111;
+}
+
 nav {
     margin-bottom: 5%;
 }

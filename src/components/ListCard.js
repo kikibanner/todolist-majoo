@@ -1,70 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import PureModal from 'react-pure-modal';
 import 'react-pure-modal/dist/react-pure-modal.min.css';
-import todoService from '../services/todolist'
 import ListItem from './ListItem'
+import DetailModal from './DetailModal';
 
 import {
     BrowserRouter as Router,
     Switch, Route, Link
   } from "react-router-dom"
 
-const DetailModal = ({ modal, setModal, selectedList, setLocalTodos, editedTitle, setEditedTitle, editedDescription, setEditedDescription, editedStatus, setEditedStatus}) => {
-
-    const [unused, setUnused] = useState()
-
-    const handleEditedTitleChange = (event) => {
-        setEditedTitle(event.target.value)
-    }
-    
-    const handleEditedDescriptionChange = (event) => {
-        setEditedDescription(event.target.value)
-    }
-
-    const handleEditedStatusChange = (event) => {
-        setEditedStatus(event.target.value)
-    }
-
-    const editList = (event) => {
-        event.preventDefault()
-        const todoObject = {
-            id: selectedList.id,
-            title: editedTitle,
-            description: editedDescription,
-            status: Number(editedStatus),
-            createdAt: selectedList.createdAt,
-        }
-        const initialTodos = JSON.parse(localStorage.getItem("todos"))
-        const withoutEdited = initialTodos.filter(i => i.id !== selectedList.id)
-        localStorage.setItem("todos", JSON.stringify(withoutEdited.concat(todoObject)))
-        setLocalTodos(JSON.parse(localStorage.getItem("todos")))
-        setModal(false)
-    }
-
-
-
-    return (
-        <PureModal isOpen={modal}onClose={() => {setModal(false);return true;}}>
-            <div className="modal">
-                <br />
-                <form onSubmit={editList}>
-                    Title {editedTitle} <br /><input onChange={handleEditedTitleChange} value={editedTitle} className='input' style={{backgroundColor: "grey", color: "white", width: "240px"}} type="text" /><br /><br />
-                    Description <textarea onChange={handleEditedDescriptionChange} value={editedDescription} className='input' style={{backgroundColor: "grey", color: "white"}} name="" id="" cols="30" rows="10"></textarea><br />
-                    Status 
-                    <select name="" id="" onChange={handleEditedStatusChange}>
-                        <option value={selectedList.status === 1 ? 1: 0}>{selectedList.status === 1 ? 1: 0}</option>
-                        <option value={selectedList.status === 0 ? 1: 0}>{selectedList.status === 0 ? 1: 0}</option>
-                    </select>
-                    <br />
-                    <br />
-                    <button className='submitbutton'>Save</button>
-                </form>
-            </div>
-        </PureModal>
-    )
-}
-
-const ListCard = ({ localTodos, setLocalTodos }) => {
+const ListCard = ({ todos, setLocalTodos, addTodo }) => {
     const [modal, setModal] = useState(false);
     const [selectedList, setSelectedList] = useState([])
 
@@ -74,28 +18,13 @@ const ListCard = ({ localTodos, setLocalTodos }) => {
 
     const [selectedPage, setSelectedPage] = useState(0)
 
-    useEffect(() => {
-        todoService
-          .getAll()
-          .then(initialTodos => {
-            localStorage.setItem("todos", JSON.stringify(initialTodos))
-            setLocalTodos(JSON.parse(localStorage.getItem("todos"))) 
-          })
-    }, [])
-
-
     return (
             <Router>
             <div id="list" class="card">
 
-                <DetailModal modal={modal} setModal={setModal} selectedList={selectedList} setLocalTodos={setLocalTodos} 
-                    editedTitle={editedTitle} setEditedTitle={setEditedTitle}
-                    editedDescription={editedDescription} setEditedDescription={setEditedDescription}
-                    editedStatus={editedStatus} setEditedStatus={setEditedStatus}
-                />
+                <DetailModal modal={modal} setModal={setModal} selectedList={selectedList} addTodo={addTodo} setEditedTitle={setEditedTitle} editedTitle={editedTitle} setEditedDescription={setEditedDescription} editedDescription={editedDescription} setEditedStatus={setEditedStatus} editedStatus={editedStatus}/>
 
                 <nav>
-                    {/* Nanti dibikin switch */}
                     <ul class="nav-list">
                         <li>
                             <Link to="/">
@@ -113,18 +42,17 @@ const ListCard = ({ localTodos, setLocalTodos }) => {
                         </li>
                     </ul>
                 </nav>
-
-                {/* Nanti dibikin component sendiri */}
-                {/* <div class="search">
-                    <input type="text" class="input search" name="" id="" placeholder="Search..."/>
-                </div> */}
-
                 
                 <Switch>
                     <Route exact path="/">
                         <div class="list">
                             {
-                                localTodos.filter(l=> l.status === 0 ).map(todo => (
+                                todos.filter(l=> l.status === 0 ).sort((a, b) => {
+                                    const aDate = new Date(a.createdAt)
+                                    const bDate = new Date(b.createdAt)
+                                    
+                                    return bDate.getTime() - aDate.getTime()
+                                  }).map(todo => (
                                     <ListItem todo={todo} modal={modal} setModal={setModal} selectedList={selectedList} setSelectedList={setSelectedList} 
                                         editedTitle={editedTitle} setEditedTitle={setEditedTitle}
                                         editedDescription={editedDescription} setEditedDescription={setEditedDescription}
@@ -140,7 +68,12 @@ const ListCard = ({ localTodos, setLocalTodos }) => {
                     <Route exact path="/done">
                         <div class="list">
                             {
-                                localTodos.filter(l=> l.status === 1 ).map(todo => (
+                                todos.filter(l=> l.status === 1 ).sort((a, b) => {
+                                    const aDate = new Date(a.createdAt)
+                                    const bDate = new Date(b.createdAt)
+                                    
+                                    return aDate.getTime() - bDate.getTime()
+                                  }).map(todo => (
                                     <ListItem todo={todo} modal={modal} setModal={setModal} selectedList={selectedList} setSelectedList={setSelectedList} 
                                         editedTitle={editedTitle} setEditedTitle={setEditedTitle}
                                         editedDescription={editedDescription} setEditedDescription={setEditedDescription}
