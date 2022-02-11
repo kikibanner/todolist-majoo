@@ -51,7 +51,7 @@ export const createToDo = (title, description) => {
             title: title,
             description: description,
             status: 0,
-            createdAt: (`${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`),
+            createdAt: (`${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()} ${date.getHours()}:${(date.getMinutes()<10?'0':'') + date.getMinutes()}`),
             id: generateId()
         }
     }
